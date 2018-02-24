@@ -11,7 +11,7 @@ def load_data(test=False):
     """
     Loads data from FTEST if *test* is True, otherwise from FTRAIN.
     Important that the files are in a `data` directory
-    """  
+    """
     FTRAIN = 'data/training.csv'
     FTEST = 'data/test.csv'
     fname = FTEST if test else FTRAIN
@@ -44,13 +44,13 @@ def plot_data(img, landmarks, axis):
     axis.imshow(np.squeeze(img), cmap='gray') # plot the image
     landmarks = landmarks * 48 + 48 # undo the normalization
     # Plot the keypoints
-    axis.scatter(landmarks[0::2], 
-        landmarks[1::2], 
-        marker='o', 
-        c='c', 
+    axis.scatter(landmarks[0::2],
+        landmarks[1::2],
+        marker='o',
+        c='c',
         s=40)
 
-def plot_keypoints(img_path, 
+def plot_keypoints(img_path,
                   face_cascade=cv2.CascadeClassifier('haarcascade_frontalface_alt.xml'),
                   model_path='my_model.h5'):
     # TODO: write a function that plots keypoints on arbitrary image containing human
@@ -71,14 +71,14 @@ def plot_keypoints(img_path,
     elif len(faces) == 1:
         plt.title('one face detected')
         x,y,w,h = faces[0]
-        bgr_crop = img[y:y+h, x:x+w] 
+        bgr_crop = img[y:y+h, x:x+w]
         orig_shape_crop = bgr_crop.shape
         gray_crop = cv2.cvtColor(bgr_crop, cv2.COLOR_BGR2GRAY)
         resize_gray_crop = cv2.resize(gray_crop, (96, 96)) / 255.
         model = load_model(model_path)
         landmarks = np.squeeze(model.predict(
             np.expand_dims(np.expand_dims(resize_gray_crop, axis=-1), axis=0)))
-        ax.scatter(((landmarks[0::2] * 48 + 48)*orig_shape_crop[0]/96)+x, 
-                   ((landmarks[1::2] * 48 + 48)*orig_shape_crop[1]/96)+y, 
+        ax.scatter(((landmarks[0::2] * 48 + 48)*orig_shape_crop[0]/96)+x,
+                   ((landmarks[1::2] * 48 + 48)*orig_shape_crop[1]/96)+y,
                    marker='o', c='c', s=40)
     plt.show()
